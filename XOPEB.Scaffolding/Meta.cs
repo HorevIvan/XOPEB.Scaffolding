@@ -10,14 +10,9 @@ namespace XOPEB.Scaffolding
             this[propertyName] = value;
         }
 
-        protected object Get([CallerMemberName] string propertyName = null)
-        {
-            return this[propertyName];
-        }
-
         protected T Get<T>([CallerMemberName] string propertyName = null)
         {
-            return (T)Get(propertyName);
+            return ContainsKey(propertyName) ? (T)this[propertyName] : default(T);
         }
     }
 }

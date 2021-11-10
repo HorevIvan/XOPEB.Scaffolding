@@ -25,15 +25,24 @@ namespace XOPEB.Scaffolding
             get => Get<bool>();
         }
 
-        public Column(string name, bool nullable, byte scale = 0, byte precision = 0, string description = null)
+        public string Type
+        {
+            set => Set(value);
+
+            get => Get<string>();
+        }
+
+        public int Index
+        {
+            set => Set(value);
+
+            get => Get<int>();
+        }
+
+        public Column(string name, string description = null)
             //
             : base(name, description)
         {
-            Nullable = nullable;
-
-            Scale = scale;
-
-            Precision = precision;
         }
     }
 }
