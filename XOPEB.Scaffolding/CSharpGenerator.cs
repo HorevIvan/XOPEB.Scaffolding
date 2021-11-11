@@ -23,7 +23,7 @@ namespace XOPEB.Scaffolding
             {
                 var className = ToSingular(table.Name);
 
-                str.AppendLine($"public static class {className}");
+                str.AppendLine($"public partial class {className}");
 
                 str.AppendLine("{");
 
