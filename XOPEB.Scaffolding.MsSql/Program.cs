@@ -17,7 +17,12 @@ using (var connection = new SqlConnection(connectionString))
         .Select(t => CreateTable(t, connection))
         .ToArray();
 
-    var cs = new CSharpGenerator().GetDatabaseClasses(tables);
+    var cg = new CSharpGenerator()
+    {
+        Namespace = "GENT"
+    };
+
+    var cs = cg.GetDatabaseClasses(tables);
 
     File.WriteAllText("out.cs", cs);
 }
