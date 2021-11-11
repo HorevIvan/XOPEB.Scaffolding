@@ -26,7 +26,16 @@ namespace XOPEB.Scaffolding
 
                 foreach (var column in table.Columns)
                 {
+                    if (column != table.Columns.First()) str.AppendLine("");
+
                     str.AppendLine($"\tpublic {column.Type} {column.Name} {{ set; get; }}");
+
+                    if (column.Type == "string")
+                    {
+                        str.AppendLine($"\tprivate const int MaxLength{column.Name}_ = {column.MaxLength};");
+                        str.AppendLine($"\tpublic static int MaxLength{column.Name} => MaxLength{column.Name}_;");
+
+                    }
                 }
 
                 str.AppendLine("}");

@@ -39,6 +39,13 @@ namespace XOPEB.Scaffolding
             get => Get<int>();
         }
 
+        public int MaxLength
+        {
+            set => Set(value);
+
+            get => Get<int>();
+        }
+
         public Column(string name, string description = null)
             //
             : base(name, description)

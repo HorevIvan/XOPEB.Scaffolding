@@ -46,6 +46,8 @@ Column CreateColumn(SqlColumn sqlColumn, SqlConnection connection)
 
     column.Index = sqlColumn.ORDINAL_POSITION;
 
+    column.MaxLength = sqlColumn.CHARACTER_MAXIMUM_LENGTH;
+
     return column;
 }
 
@@ -54,6 +56,11 @@ string GetType(SqlColumn sqlColumn)
     if (sqlColumn.DATA_TYPE == "int")
     {
         return "int";
+    }
+
+    if (sqlColumn.DATA_TYPE == "bit")
+    {
+        return "bool";
     }
 
     if (sqlColumn.DATA_TYPE == "datetime2" || sqlColumn.DATA_TYPE == "datetime")
@@ -71,6 +78,8 @@ internal class SqlColumn
     internal string IS_NULLABLE { get; set; } = string.Empty;
 
     internal int ORDINAL_POSITION { get; set; }
+
+    internal int CHARACTER_MAXIMUM_LENGTH { get; set; }
 
     internal string DATA_TYPE { get; set; } = string.Empty;
 }
