@@ -15,7 +15,11 @@ namespace XOPEB.Scaffolding
             var str = new StringBuilder();
 
             str.AppendLine("using System;");
-            str.AppendLine("using System.ComponentModel.DataAnnotations;");
+
+            if (UseStringMaxLength && tables.Any(t => t.Columns.Any(c => c.Type == "string")))
+            {
+                str.AppendLine("using System.ComponentModel.DataAnnotations;");
+            }
 
             str.AppendLine("");
 
