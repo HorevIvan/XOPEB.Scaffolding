@@ -13,6 +13,7 @@ namespace XOPEB.Scaffolding
             var str = new StringBuilder();
 
             str.AppendLine("using System;");
+            str.AppendLine("using System.ComponentModel.DataAnnotations;");
 
             str.AppendLine("");
 
@@ -28,13 +29,17 @@ namespace XOPEB.Scaffolding
                 {
                     if (column != table.Columns.First()) str.AppendLine("");
 
+                    if (column.Type == "string")
+                    {
+                        str.AppendLine($"\t[MaxLength({column.MaxLength})]");
+                    }
+
                     str.AppendLine($"\tpublic {column.Type} {column.Name} {{ set; get; }}");
 
                     if (column.Type == "string")
                     {
                         str.AppendLine($"\tprivate const int MaxLength{column.Name}_ = {column.MaxLength};");
                         str.AppendLine($"\tpublic static int MaxLength{column.Name} => MaxLength{column.Name}_;");
-
                     }
                 }
 
