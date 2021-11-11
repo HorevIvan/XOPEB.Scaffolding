@@ -8,6 +8,8 @@ namespace XOPEB.Scaffolding
 {
     public class CSharpGenerator : LanguageGenerator
     {
+        public bool UseStringMaxLength { set; get; }
+
         public string GetDatabaseClasses(IEnumerable<Table> tables)
         {
             var str = new StringBuilder();
@@ -29,14 +31,14 @@ namespace XOPEB.Scaffolding
                 {
                     if (column != table.Columns.First()) str.AppendLine("");
 
-                    if (column.Type == "string")
+                    if (column.Type == "string" && UseStringMaxLength)
                     {
-                        str.AppendLine($"\t[MaxLength({column.MaxLength})]");
+                        str.AppendLine($"\t[MaxLength(MaxLength{column.Name}_)]");
                     }
 
-                    str.AppendLine($"\tpublic {column.Type} {column.Name} {{ set; get; }}");
+                    str.AppendLine($"\tpublic {column.Type}{(column.Nullable ? "?" : "")} {column.Name} {{ set; get; }} {(!UseStringMaxLength && column.Type == "string" ? $" // max {column.MaxLength}" : "")}");
 
-                    if (column.Type == "string")
+                    if (column.Type == "string" && UseStringMaxLength)
                     {
                         str.AppendLine($"\tprivate const int MaxLength{column.Name}_ = {column.MaxLength};");
                         str.AppendLine($"\tpublic static int MaxLength{column.Name} => MaxLength{column.Name}_;");
