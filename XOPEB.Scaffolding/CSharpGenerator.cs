@@ -10,6 +10,8 @@ namespace XOPEB.Scaffolding
     {
         public bool UseStringMaxLength { set; get; }
 
+        public bool UseMeta { set; get; }
+
         public string Namespace { set; get; } = "XOPEB.Scaffolding";
 
         public string GetDatabaseClasses(IEnumerable<Table> tables)
@@ -45,6 +47,13 @@ namespace XOPEB.Scaffolding
 
             str.AppendLine("{");
 
+            if (UseMeta)
+            {
+                str.AppendLine($"\tusing XOPEB.DatabaseMeta;");
+
+                str.AppendLine("");
+            }
+
             foreach (var table in tables)
             {
                 if (table != tables.First()) str.AppendLine("");
@@ -74,6 +83,31 @@ namespace XOPEB.Scaffolding
                 }
 
                 str.AppendLine("\t}");
+
+                if (UseMeta)
+                {
+                    str.AppendLine("");
+
+                    str.AppendLine($"\tpublic class {table.Name}Table : TableMeta");
+
+                    str.AppendLine("\t{");
+
+                    foreach (var column in table.Columns)
+                    {
+                        if (column != table.Columns.First()) str.AppendLine("");
+
+                        if (column.Type == "string")
+                        {
+                            str.AppendLine($"\t\tpublic StringColumnMeta {column.Name} {{ get; }} = new (\"{column.Name}\", nullable: {column.Nullable.ToDB()}, maxLength: {column.MaxLength}, unicode: {column.IsUnicode.ToDB()});");
+                        }
+                        else
+                        {
+                            str.AppendLine($"\t\tpublic ColumnMeta {column.Name} {{ get; }} = new (\"{column.Name}\", nullable: {column.Nullable.ToDB()});");
+                        }
+                    }
+
+                    str.AppendLine("\t}");
+                }
             }
 
             str.AppendLine("}");
@@ -92,6 +126,14 @@ namespace XOPEB.Scaffolding
             }
 
             return name.TrimEnd('s');
+        }
+    }
+
+    public static class Converters
+    {
+        public static string ToDB(this bool value)
+        {
+            return value ? "true" : "false";
         }
     }
 }

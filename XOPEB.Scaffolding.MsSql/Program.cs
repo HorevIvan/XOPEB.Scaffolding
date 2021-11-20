@@ -19,7 +19,8 @@ using (var connection = new SqlConnection(connectionString))
 
     var cg = new CSharpGenerator()
     {
-        Namespace = "GENT"
+        Namespace = "GENT",
+        UseMeta = true,
     };
 
     var cs = cg.GetDatabaseClasses(tables);
@@ -52,6 +53,8 @@ Column CreateColumn(SqlColumn sqlColumn, SqlConnection connection)
     column.Index = sqlColumn.ORDINAL_POSITION;
 
     column.MaxLength = sqlColumn.CHARACTER_MAXIMUM_LENGTH;
+
+    column.IsUnicode = sqlColumn.CHARACTER_SET_NAME == "UNICODE";
 
     return column;
 }
@@ -87,6 +90,8 @@ internal class SqlColumn
     internal int CHARACTER_MAXIMUM_LENGTH { get; set; }
 
     internal string DATA_TYPE { get; set; } = string.Empty;
+
+    internal string CHARACTER_SET_NAME { set; get; } = string.Empty;
 }
 
 internal class SqlTable

@@ -46,6 +46,13 @@ namespace XOPEB.Scaffolding
             get => Get<int>();
         }
 
+        public bool IsUnicode
+        {
+            set => Set(value);
+
+            get => Get<bool>();
+        }
+
         public Column(string name, string description = null)
             //
             : base(name, description)
