@@ -21,6 +21,7 @@ using (var connection = new SqlConnection(connectionString))
     {
         Namespace = "GENT",
         UseMeta = true,
+        DatabaseMetaName = "Root",
     };
 
     var cs = cg.GetDatabaseClasses(tables);

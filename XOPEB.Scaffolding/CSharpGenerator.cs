@@ -12,6 +12,8 @@ namespace XOPEB.Scaffolding
 
         public bool UseMeta { set; get; }
 
+        public string DatabaseMetaName { set; get; }
+
         public string Namespace { set; get; } = "XOPEB.Scaffolding";
 
         public string GetDatabaseClasses(IEnumerable<Table> tables)
@@ -49,7 +51,7 @@ namespace XOPEB.Scaffolding
 
             if (UseMeta)
             {
-                str.AppendLine($"\tusing XOPEB.DatabaseMeta;");
+                str.AppendLine($"\tusing XOPEB.Meta;");
 
                 str.AppendLine("");
             }
@@ -108,6 +110,24 @@ namespace XOPEB.Scaffolding
 
                     str.AppendLine("\t}");
                 }
+            }
+
+            if (UseMeta)
+            {
+                str.AppendLine("");
+
+                str.AppendLine($"\tpublic class {DatabaseMetaName}Database : DatabaseMeta");
+
+                str.AppendLine("\t{");
+
+                foreach (var table in tables)
+                {
+                    if (table != tables.First()) str.AppendLine("");
+
+                    str.AppendLine($"\t\tpublic {table.Name}Table {table.Name} {{ get; }} = new();");
+                }
+
+                str.AppendLine("\t}");
             }
 
             str.AppendLine("}");
